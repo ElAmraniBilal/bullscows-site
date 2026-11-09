@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: bullscows-arena-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: "https://bullscows.xyz,https://www.bullscows.xyz"
