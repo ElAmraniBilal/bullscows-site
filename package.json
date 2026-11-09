@@ -1,0 +1,12 @@
+{
+  "name": "bulls-cows-arena",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A live, room-code Bulls & Cows game for friends",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
