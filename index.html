@@ -1,31 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bulls & Cows</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <h1>Bulls & Cows</h1>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#play">Play</a>
-    </nav>
-  </header>
-
-  <main>
-    <section id="about">
-      <h2>About</h2>
-      <p>Welcome to my website.</p>
-    </section>
-    <section id="play">
-      <h2>Play</h2>
-      <p>Coming soon.</p>
-    </section>
-  </main>
-
-  <footer>&copy; 2026 bullscows.xyz</footer>
-</body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bulls &amp; Cows</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="card">
+<header><p class="eyebrow">● &nbsp; THE NUMBER DEDUCTION GAME</p><h1>Bulls <em>&amp;</em> Cows</h1><p class="sub">Crack the secret code. Use the clues to find the number.</p></header>
+<aside class="rules"><b>How to play</b><p>Guess the <span id="len">4</span>-digit code. Every digit is unique, and it never starts with zero.</p><small><i class="bull"></i> right digit, right place &nbsp; <i class="cow"></i> right digit, wrong place</small></aside>
+<div class="settings"><label for="difficulty">CODE LENGTH</label><select id="difficulty"><option value="3">3 digits · Easy</option><option value="4" selected>4 digits · Classic</option><option value="5">5 digits · Tricky</option></select><button id="new">↻ &nbsp;New game</button></div>
+<section><div class="section-title"><h2><small>01</small> Your guess</h2><span id="count">0 guesses</span></div><form id="form"><label class="sr" for="guess">Enter your guess</label><input id="guess" inputmode="numeric" placeholder="Enter code" required><button class="submit">Guess <b>→</b></button></form><p class="hint" id="hint"></p><p class="message" id="message" role="status" aria-live="polite"></p></section>
+<section class="history-section"><div class="section-title"><h2><small>02</small> Guess history</h2><button class="clear" id="clear">Clear</button></div><div class="labels"><span>GUESS</span><span>CLUES</span><span>RESULT</span></div><ol id="history"><li class="empty">↳ &nbsp;Your guesses will appear here.</li></ol></section>
+<footer><b>B<span>&amp;</span>C</b><span>A little logic goes a long way.</span><span id="possible"></span></footer>
+</main><script>
+(()=>{const $=s=>document.querySelector(s),form=$('#form'),input=$('#guess'),hist=$('#history'),msg=$('#message'),diff=$('#difficulty');let secret='',turns=0,done=false;
+function start(){let n=+diff.value,d=[...'0123456789'];for(let i=d.length-1;i>0;i--){let j=Math.random()*(i+1)|0;[d[i],d[j]]=[d[j],d[i]]}if(d[0]==='0'){let j=d.findIndex((x,i)=>i>0&&x!=='0');[d[0],d[j]]=[d[j],d[0]]}secret=d.slice(0,n).join('');turns=0;done=false;$('#len').textContent=n;input.maxLength=n;input.disabled=false;form.querySelector('button').disabled=false;input.value='';$('#hint').textContent=`Enter ${n} different digits. The first digit can’t be zero.`;$('#count').textContent='0 guesses';$('#possible').textContent=(9*Array.from({length:n-1},(_,i)=>10-i).reduce((a,b)=>a*b,1)).toLocaleString()+' possible codes';hist.innerHTML='<li class="empty">↳ &nbsp;Your guesses will appear here.</li>';msg.textContent='';msg.className='message';input.focus()}
+form.addEventListener('submit',e=>{e.preventDefault();if(done)return;let g=input.value.trim(),n=+diff.value;if(!new RegExp('^\\d{'+n+'}$').test(g)){msg.textContent=`Please enter exactly ${n} digits.`;msg.className='message error';return}if(g[0]==='0'){msg.textContent='The first digit can’t be zero.';msg.className='message error';return}if(new Set(g).size<n){msg.textContent='Each digit must be different.';msg.className='message error';return}let bulls=0,cows=0;for(let i=0;i<n;i++){if(g[i]===secret[i])bulls++;else if(secret.includes(g[i]))cows++}turns++;if(turns===1)hist.innerHTML='';let row=document.createElement('li');row.className='row';let num=document.createElement('span');num.className='number';num.textContent=g;let marks=document.createElement('span');marks.className='marks';for(let i=0;i<bulls;i++){let x=document.createElement('i');x.className='bull';marks.append(x)}for(let i=0;i<cows;i++){let x=document.createElement('i');x.className='cow';marks.append(x)}if(!bulls&&!cows)marks.textContent='—';let result=document.createElement('span');result.className='result';result.textContent=`${bulls} bull${bulls===1?'':'s'}, ${cows} cow${cows===1?'':'s'}`;row.append(num,marks,result);hist.prepend(row);$('#count').textContent=turns+(turns===1?' guess':' guesses');input.value='';if(bulls===n){msg.textContent=`You cracked the code in ${turns} ${turns===1?'guess':'guesses'}!`;msg.className='message success';done=true;input.disabled=true;form.querySelector('button').disabled=true}else{msg.textContent='Good clue. What’s your next guess?';msg.className='message';input.focus()}});
+$('#new').addEventListener('click',start);$('#clear').addEventListener('click',start);diff.addEventListener('change',start);start()})();
+</script></body></html>
